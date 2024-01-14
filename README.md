@@ -1,0 +1,1 @@
+Comments and explanations for the test-assignments: I did globalLoader to load indicator while fetching data from the AP and globalerror Error handling I made sure of correct division into components and clean code For the design I used the material ui library
