@@ -1,4 +1,7 @@
-export default interface ICategory {
-    title: string,
-    description: string,
-    imageUrl: number}
+import IOrderItem from "./IOrderItem";
+import IUser from "./IUser";
+
+export default interface IOrder {
+    user: IUser,
+    orderItem:IOrderItem[],
+    date: Date}

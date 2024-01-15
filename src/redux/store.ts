@@ -1,4 +1,6 @@
 import userReducer from './slices/userSlice';
+import userIdReducer from './slices/userIdSlice';
+
 import loadingReducer from './slices/loadingSlice';
 import { useDispatch } from "react-redux";
 import { configureStore } from '@reduxjs/toolkit';
@@ -9,6 +11,7 @@ export const store = configureStore({
         loadingReducer,
         userReducer,
         errorReducer,
+        userIdReducer
 
     },
 })

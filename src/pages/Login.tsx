@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {login} from '../apiCalls/userCalls';
+import { login } from '../apiCalls/userCalls';
 import IUser from '../model/IUser';
 import IUserState from '../model/IUserState';
 import { RootState, store } from '../redux/store';
 import { useSelector } from 'react-redux';
 import { setUser } from '../redux/slices/userSlice';
 import { setUserId } from '../redux/slices/userIdSlice';
+import { Alert, AlertProps } from '@mui/material';
+import { SnackBar } from './globalCss.styles';
 interface FormData {
     username: string;
     email: string;
@@ -20,6 +22,11 @@ const Login = () => {
         password: '',
     });
     const user: IUser = useSelector<RootState, IUserState>((state: any) => state.userReducer).user;
+    const [snackbar, setSnackbar] = React.useState<Pick<
+        AlertProps,
+        'children' | 'severity'
+    > | null>(null);
+    const handleCloseSnackbar = () => setSnackbar(null);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -29,7 +36,6 @@ const Login = () => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         // Add the action to send the details to the server or perform additional processing
-        console.log('Form submitted:', formData);
     };
 
     const navigate = useNavigate();
@@ -38,16 +44,22 @@ const Login = () => {
         // Navigate to the "Register" page
         navigate('/Register');
     };
-    const loginUser = async() => {
-        await login(formData.email,formData.password).then(res=>{
-            sessionStorage.setItem("token", res.data.token);
-            console.log(user,"before");
-            store.dispatch(setUser(res.data.user))
-            store.dispatch(setUserId(res.data.userId))            
-            
-        })
-        navigate('/Shop');
+    const loginUser = async () => {
 
+        try {
+            const res = await login(formData.email, formData.password);
+            if (res.data) {
+                sessionStorage.setItem("token", res.data.token);
+                store.dispatch(setUser(res.data.user))
+                store.dispatch(setUserId(res.data.userId))
+                setSnackbar({ children: ' successfully login', severity: 'success' });
+                navigate('/Shop');
+            } else {
+                setSnackbar({ children: 'An unexpected error occurred. Please try again later.', severity: 'error' });
+            }
+        } catch (err:any) {
+            setSnackbar({ children: "Something went wrong. An error occurred: " + err.message, severity: 'error' });
+        }
     };
     return (
         <div
@@ -71,7 +83,7 @@ const Login = () => {
             >
                 <h2 style={{ fontSize: '24px', margin: '0 0 20px' }}>התחברות</h2>
                 <form onSubmit={handleSubmit}>
-                    
+
                     <label style={{ display: 'block', margin: '10px 0', textAlign: 'right' }}>
                         :מייל
                         <br />
@@ -105,7 +117,7 @@ const Login = () => {
                             fontSize: '16px',
                             border: 'none',
                         }}
-                   onClick={loginUser} >
+                        onClick={loginUser} >
                         התחברות
                     </button>
                     <br />
@@ -126,6 +138,15 @@ const Login = () => {
                     </button>
                 </form>
             </div>
+            {!!snackbar && (
+                <SnackBar
+                    open
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                    onClose={handleCloseSnackbar}
+                    autoHideDuration={6000}
+                >
+                    <Alert {...snackbar} onClose={handleCloseSnackbar} />
+                </SnackBar>)}
         </div>
     );
 };

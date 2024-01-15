@@ -12,12 +12,14 @@ import Home from './pages/Home';
 import Shop from './pages/Shop';
 import Perlinim from './pages/Perlinim';
 import AddToCard from './pages/AddToCard';
-import Sweet from './pages/Sweet';
-import Personal_Customization from './pages/Personal_Customization';
 import Shopping from './pages/Shopping';
 import Payment from './pages/Payment';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import { SnackbarProvider } from 'notistack';
+import { SnackBar } from './pages/globalCss.styles';
+import { Alert } from '@mui/material';
+
 function App() {
 
   useEffect(() => {
@@ -37,17 +39,15 @@ function App() {
 
         <Route path="/about-us" element={<About />} />
         <Route path="/Shop" element={<Shop />} />
-        <Route path="/Perlinim" element={<Perlinim />} />
-        <Route path="/AddToCard" element={<AddToCard />} />
-        <Route path="/Sweet" element={<Sweet />} />
-        <Route path="/Personal_Customization" element={<Personal_Customization />} />
-        <Route path="/Shopping" element={<Shopping />} />
+        <Route path="/Perlinim/:categoryId" element={<Perlinim />} />
         <Route path="/Payment" element={<Payment />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/Register" element={<Register />} />
-
+        <Route path="/AddToCard" element={<AddToCard />} />
+        <Route path="/Shopping" element={<Shopping />} />
         {/* ... נתיבים אחרים ... */}
       </Routes>
+
     </div>
   );
 

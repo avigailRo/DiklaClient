@@ -22,6 +22,7 @@
     "dayjs": "^1.11.9",
     "dotenv": "^16.3.1",
     "formik": "^2.4.2",
+    "notistack": "^3.0.1",
     "path-browserify": "^1.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -67,8 +68,8 @@
   "devDependencies": {
     "@types/jest": "^29.5.3",
     "@types/node": "^20.10.0",
-    "@types/react": "^18.2.14",
-    "@types/react-dom": "^18.2.7",
+    "@types/react": "^18.2.47",
+    "@types/react-dom": "^18.2.18",
     "@types/react-router-dom": "^5.3.3",
     "@types/styled-components": "^5.1.34"
   }

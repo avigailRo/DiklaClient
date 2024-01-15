@@ -1,4 +1,6 @@
-export default interface ICategory {
-    title: string,
-    description: string,
-    imageUrl: number}
+
+
+export default interface IOrderItem {
+    user: string,
+    petipur: string,
+    count: number}

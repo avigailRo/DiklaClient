@@ -5,6 +5,8 @@ import { store } from '../redux/store';
 import { setUser } from '../redux/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { setUserId } from '../redux/slices/userIdSlice';
+import { SnackBar } from './globalCss.styles';
+import { Alert, AlertProps } from '@mui/material';
 
 interface FormData {
     username: string;
@@ -19,7 +21,11 @@ const Register = () => {
         password: '',
     });
     const navigate = useNavigate();
-
+    const [snackbar, setSnackbar] = React.useState<Pick<
+        AlertProps,
+        'children' | 'severity'
+    > | null>(null);
+    const handleCloseSnackbar = () => setSnackbar(null);
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -28,22 +34,26 @@ const Register = () => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         // כאן תוכל להוסיף את הפעולה של שליחת הפרטים לשרת או עיבוד נוסף
-        console.log('Form submitted:', formData);
     };
-    const handleSignUp =async () => {
-    const user:IUser={userName:formData.username,email:formData.email,password:formData.password};
-    await signUp(user).then(res=>{
-        console.log(res,"dfdgfhf");   
-    })
-    await login(formData.email,formData.password).then(res=>{
-        sessionStorage.setItem("token", res.data.token);
-        console.log(user,"before");
-        store.dispatch(setUser(res.data.user))
-        store.dispatch(setUserId(res.data.userId))          
-    })
-    navigate('/Shop');
-
-    };
+    const handleSignUp = async() => {
+        const user: IUser = { userName: formData.username, email: formData.email, password: formData.password, username: formData.username };
+        try {
+             signUp(user).then(resu=>{console.log(resu.data);
+        
+              login(formData.email, formData.password).then(res=>{
+            if (res.data) {
+                sessionStorage.setItem("token", res.data.token);
+                store.dispatch(setUser(res.data.user))
+                store.dispatch(setUserId(res.data.userId))
+                setSnackbar({ children: ' successfully login', severity: 'success' });
+                navigate('/Shop');
+            } else {
+                setSnackbar({ children: 'An unexpected error occurred. Please try again later.', severity: 'error' });
+            }
+        })})
+        } catch (err:any) {
+            setSnackbar({ children: "Something went wrong. An error occurred: " + err.message, severity: 'error' });
+         }  }
     return (
         <div
             style={{
@@ -109,12 +119,21 @@ const Register = () => {
                             fontSize: '16px',
                             border: 'none',
                         }}
-                    onClick={handleSignUp}>
+                        onClick={handleSignUp}>
                         התחברות
                     </button>
                     <br />
                 </form>
             </div>
+            {!!snackbar && (
+                <SnackBar
+                    open
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                    onClose={handleCloseSnackbar}
+                    autoHideDuration={6000}
+                >
+                    <Alert {...snackbar} onClose={handleCloseSnackbar} />
+                </SnackBar>)}
         </div>
     );
 };

@@ -10,6 +10,8 @@ const AxiosInstance = (store: any) => {
     let token = sessionStorage.getItem("token");
     if (config.url && config.url.indexOf(LOGIN) === -1 && token) {
       config.headers["authorization"] = token;
+      console.log(token,"ggg");
+      
     }
     return config;
   },
@@ -31,7 +33,7 @@ const AxiosInstance = (store: any) => {
     },
     (error) => {
       store.dispatch(setLoading(false))
-      if (error.response?.status == 500||error.response?.status==409) {
+      if (error.response?.status==500) {
         if (error.response.data && error.response.data.message) {
           store.dispatch(setError(error.response.data.message));
           return;

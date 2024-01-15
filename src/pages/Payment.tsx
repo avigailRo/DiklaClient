@@ -1,4 +1,10 @@
 import React, { useState, ChangeEvent } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { payment } from '../apiCalls/orderCalls';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
+import { SnackBar } from './globalCss.styles';
+import { Alert, AlertProps } from '@mui/material';
 
 const Payment = () => {
     const [paymentData, setPaymentData] = useState({
@@ -6,17 +12,32 @@ const Payment = () => {
         expiryDate: '',
         cvv: '',
     });
+    const location = useLocation();  
+    const [snackbar, setSnackbar] = React.useState<Pick<
+        AlertProps,
+        'children' | 'severity'
+    > | null>(null);
+    const handleCloseSnackbar = () => setSnackbar(null);
+    const userId: string = useSelector<RootState, any>((state: any) => state.userIdReducer).userId;
 
+      const order = location.state?.order;
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setPaymentData({ ...paymentData, [name]: value });
     };
+    const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        // כאן תוכל להוסיף את הפעולה של שליחת פרטי התשלום לשרת או עיבוד נוסף
-        console.log('Payment submitted:', paymentData);
-    };
+    const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+        try {
+            await  payment(userId,order._id)
+           setSnackbar({ children: 'התשלום בוצע בהצלחה ', severity: 'success' });
+            navigate('/Shop');
+          } catch (error:any) {
+            setSnackbar({ children: "בעיה בתשלום " + error.message, severity: 'error' });
+          }
+        };
+       
+
 
     return (
         <div
@@ -88,6 +109,15 @@ const Payment = () => {
                     </button>
                 </form>
             </div>
+            {!!snackbar && (
+                <SnackBar
+                    open
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                    onClose={handleCloseSnackbar}
+                    autoHideDuration={6000}
+                >
+                    <Alert {...snackbar} onClose={handleCloseSnackbar} />
+                </SnackBar>)}
         </div>
     );
 };
