@@ -36,11 +36,10 @@ const Register = () => {
         // כאן תוכל להוסיף את הפעולה של שליחת הפרטים לשרת או עיבוד נוסף
     };
     const handleSignUp = async() => {
+        if(formData){
         const user: IUser = { userName: formData.username, email: formData.email, password: formData.password, username: formData.username };
         try {
-             signUp(user).then(resu=>{console.log(resu.data);
-        
-              login(formData.email, formData.password).then(res=>{
+             signUp(user).then(res=>{;       
             if (res.data) {
                 sessionStorage.setItem("token", res.data.token);
                 store.dispatch(setUser(res.data.user))
@@ -50,10 +49,10 @@ const Register = () => {
             } else {
                 setSnackbar({ children: 'An unexpected error occurred. Please try again later.', severity: 'error' });
             }
-        })})
+        })
         } catch (err:any) {
             setSnackbar({ children: "Something went wrong. An error occurred: " + err.message, severity: 'error' });
-         }  }
+         }  }}
     return (
         <div
             style={{

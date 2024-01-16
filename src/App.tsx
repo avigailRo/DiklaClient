@@ -11,7 +11,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import Shop from './pages/Shop';
 import Perlinim from './pages/Perlinim';
-import AddToCard from './pages/AddToCard';
+import AddToCard from './pages/AddToCart';
 import Shopping from './pages/Shopping';
 import Payment from './pages/Payment';
 import Login from './pages/Login';
@@ -19,6 +19,7 @@ import Register from './pages/Register';
 import { SnackbarProvider } from 'notistack';
 import { SnackBar } from './pages/globalCss.styles';
 import { Alert } from '@mui/material';
+import AddToCart from './pages/AddToCart';
 
 function App() {
 
@@ -43,8 +44,9 @@ function App() {
         <Route path="/Payment" element={<Payment />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/Register" element={<Register />} />
-        <Route path="/AddToCard" element={<AddToCard />} />
-        <Route path="/Shopping" element={<Shopping />} />
+        <Route path="/AddToCart" element={<AddToCart />} />
+        {sessionStorage.getItem('token')&& <Route path="/Shopping" element={<Shopping />} />
+}
         {/* ... נתיבים אחרים ... */}
       </Routes>
 

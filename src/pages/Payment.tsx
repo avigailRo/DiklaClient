@@ -20,19 +20,18 @@ const Payment = () => {
     const handleCloseSnackbar = () => setSnackbar(null);
     const userId: string = useSelector<RootState, any>((state: any) => state.userIdReducer).userId;
 
-      const order = location.state?.order;
+      const order = location.state?.order;      
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setPaymentData({ ...paymentData, [name]: value });
     };
     const navigate = useNavigate();
 
-    const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
-        try {
+    const handleSubmit = async() => {
+        try {            
             await  payment(userId,order._id)
            setSnackbar({ children: 'התשלום בוצע בהצלחה ', severity: 'success' });
-            navigate('/Shop');
-          } catch (error:any) {
+          } catch (error:any) {            
             setSnackbar({ children: "בעיה בתשלום " + error.message, severity: 'error' });
           }
         };
@@ -93,8 +92,10 @@ const Payment = () => {
                             style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
                         />
                     </label>
-                    <button
-                        type="submit"
+                  
+                </form>
+                <button
+                 onClick={handleSubmit}
                         style={{
                             backgroundColor: '#DAA520', // רקע צהוב כהה
                             color: 'white',
@@ -107,7 +108,6 @@ const Payment = () => {
                     >
                         שלם
                     </button>
-                </form>
             </div>
             {!!snackbar && (
                 <SnackBar

@@ -56,6 +56,8 @@ const Login = () => {
                 navigate('/Shop');
             } else {
                 setSnackbar({ children: 'An unexpected error occurred. Please try again later.', severity: 'error' });
+                navigate('/Register');
+
             }
         } catch (err:any) {
             setSnackbar({ children: "Something went wrong. An error occurred: " + err.message, severity: 'error' });

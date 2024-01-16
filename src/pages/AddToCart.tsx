@@ -45,6 +45,12 @@ const navigate = useNavigate();
        setSnackbar({ children: ' מוצר נוסף לעגלה בהצלחה', severity: 'success' });
         navigate('/Shop');
       } catch (error:any) {
+        if(error.response?.status==404){
+        setSnackbar({ children: "יש צורך בכניסה למערכת: " + error.message, severity: 'error' });
+        navigate("/Login")
+
+    }
+else
         setSnackbar({ children: "ארעה שגיאה בתהליך ההוספה לעגלה: " + error.message, severity: 'error' });
       }
     };

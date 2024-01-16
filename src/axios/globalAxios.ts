@@ -10,7 +10,6 @@ const AxiosInstance = (store: any) => {
     let token = sessionStorage.getItem("token");
     if (config.url && config.url.indexOf(LOGIN) === -1 && token) {
       config.headers["authorization"] = token;
-      console.log(token,"ggg");
       
     }
     return config;

@@ -6,7 +6,7 @@ import pageImage from '../images/About.png'; // תחליף עם נתיב התמ�
 import sweet from '../images/sweet.png';
 import Personal_customization from '../images/Personal customization.png';
 import perlinim from '../images/perlinim.png';
-import AddToCard from './AddToCard';
+import AddToCard from './AddToCart';
 import { Route, useNavigate, useParams } from 'react-router-dom';
 import { getAllPetipurByCategoryId } from '../apiCalls/petipurcalls';
 import { log } from 'console';
@@ -31,8 +31,8 @@ const Perlinim = () => {
             )
       }, []);
 
-      const addToCard = (petipur:any) => {
-        navigate(`/AddToCard`, { state: { petipur } });
+      const addToCart = (petipur:any) => {
+        navigate(`/AddToCart`, { state: { petipur } });
         
     };
 
@@ -41,7 +41,7 @@ const Perlinim = () => {
 
             {images.map((image:any, index:any) => (
 
-                <Grid item xs={12} sm={4} key={index} onClick={() => addToCard(image)}>
+                <Grid item xs={12} sm={4} key={index} onClick={() => addToCart(image)}>
                     <Card className="Card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         <Typography variant="body2" style={{ color: 'blue', margin: '10px 0' }}>
                             <a >{image.name} </a>                        </Typography>
